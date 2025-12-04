@@ -1,19 +1,24 @@
+# recette qui permet de dire quel contenaire créer et comment 
+# on commence par definir des services 
 services:
+
+#premier service
   geoserver:
-    container_name: geonum_geoserver
-    image: docker.osgeo.org/geoserver:2.26.0
-    environment:
+    container_name: geonum_geoserver #permet de définir le nom du service (sinon générer par défaux par docker)
+    image: docker.osgeo.org/geoserver:2.26.0 #permet de dire ce dont on as besoin d'installer (image officiel de geoserver)
+    environment: 
       - RUN_UNPRIVILEGED=true
       - CHANGE_OWNERSHIP_ON_FOLDERS="/opt /opt/geoserver_data/ /mnt/geoserver_geodata"
       - CORS_ENABLED=true
       - SKIP_DEMO_DATA=true
     ports:
-      - "8080:8080"
-    volumes:
+      - "8080:8080" #port externe : port interne --> permet de se connecter au localhost (ne jamais toucher le port interne)
+    volumes: # permet de stocker la donnée même quand le contenaire et stopper 
       - ./geoserver/opt:/opt/geoserver_data
 
+#deuxième service 
   web:
-    container_name: geonum_web
+    container_name: geonum_web #permet de définir le nom du service (sinon générer par défaux par docker)
     image: caddy:latest
     ports:
       - "80:80"
